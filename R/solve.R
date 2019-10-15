@@ -34,7 +34,8 @@ BogglePath <- setClass("BogglePath",
 #'
 #' @export
 #'
-solve <- function(boggle_board, dict = spark_intro_dict, word_min_len = 3) {
+solve <- function(boggle_board, dict = boggler::spark_intro_dict,
+                  word_min_len = 3) {
   m <- nrow(boggle_board)
   n <- ncol(boggle_board)
 

@@ -4,7 +4,7 @@
 \alias{solve}
 \title{Solve a Boggle board.}
 \usage{
-solve(boggle_board, dict = spark_intro_dict, word_min_len = 3)
+solve(boggle_board, dict = boggler::spark_intro_dict, word_min_len = 3)
 }
 \arguments{
 \item{boggle_board}{The Boggle board represented as a matrix of letters.}

@@ -4,7 +4,7 @@
 \alias{new_board}
 \title{Creates a random Boggle board.}
 \usage{
-new_board(m = 4, n = 4, dices = en_boggle_dices)
+new_board(m = 4, n = 4, dices = boggler::en_boggle_dices)
 }
 \arguments{
 \item{m}{Number of rows of the Boggle board.}

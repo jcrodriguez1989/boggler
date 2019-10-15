@@ -11,7 +11,7 @@
 #'
 #' @export
 #'
-new_board <- function(m = 4, n = 4, dices = en_boggle_dices) {
+new_board <- function(m = 4, n = 4, dices = boggler::en_boggle_dices) {
   if (any(sapply(dices, nchar) != 6) || length(dices) < 1) {
     stop("Dices must be a vector of 6-letters strings.")
   }
