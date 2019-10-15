@@ -30,6 +30,7 @@ BogglePath <- setClass("BogglePath",
 #'          of a word to count as a valid word.
 #'
 #' @importFrom methods is new
+#' @include data.R
 #'
 #' @export
 #'
@@ -38,8 +39,8 @@ solve <- function(boggle_board, dict = spark_intro_dict, word_min_len = 3) {
   n <- ncol(boggle_board)
 
   if (m < 1 || n < 1 ||
-      !is(as.vector(boggle_board), "character") ||
-      !all(nchar(boggle_board) == 1)) {
+    !is(as.vector(boggle_board), "character") ||
+    !all(nchar(boggle_board) == 1)) {
     stop("Boggle board must be a matrix of letters.")
   }
   boggle_board <- tolower(boggle_board)
@@ -96,6 +97,8 @@ solve <- function(boggle_board, dict = spark_intro_dict, word_min_len = 3) {
     )
   }))
 
+  colnames(res) <- c("Word", "Path")
+
   # return them alphabetically ordered
   if (!is.null(res)) {
     res[order(res[, 1]), ]
@@ -124,9 +127,9 @@ next_paths <- function(path, boggle_board) {
     # a previously used die is not used again
     if (
       all(new_pos > c(0, 0)) &&
-      new_pos[[1]] <= nrow(boggle_board) &&
-      new_pos[[2]] <= ncol(boggle_board) &&
-      !any(apply(vis_cells, 1, function(vis_cell) all(new_pos == vis_cell)))) {
+        new_pos[[1]] <= nrow(boggle_board) &&
+        new_pos[[2]] <= ncol(boggle_board) &&
+        !any(apply(vis_cells, 1, function(vis_cell) all(new_pos == vis_cell)))) {
       BogglePath(
         act_cell = new_pos,
         # use the previous word, plus the new letter

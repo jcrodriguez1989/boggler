@@ -7,6 +7,8 @@
 #' @param dices Character vector, where each item must be a 6-letters string.
 #'          Each item represents a dice.
 #'
+#' @include data.R
+#'
 #' @export
 #'
 new_board <- function(m = 4, n = 4, dices = en_boggle_dices) {

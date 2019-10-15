@@ -1,15 +1,25 @@
 Package: boggler
 Type: Package
-Title: Solve Boggle Game
+Title: Solve the Boggle Game
 Version: 0.1.0
 Authors@R: c(
     person(given = "Juan Cruz", family = "Rodriguez", 
         role = c("aut", "cre"), email = "jcrodriguez@unc.edu.ar")
     )
 Maintainer: Juan Cruz Rodriguez <jcrodriguez@unc.edu.ar>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Description: Create random Boggle game boards, and automatically solve them 
+    given a dictionary.
+Depends: R (>= 3.6.0)
+Imports:
+    methods
+License: GPL-3
+URL: https://github.com/jcrodriguez1989/boggler/
+BugReports: https://github.com/jcrodriguez1989/boggler/issues
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
+Collate: 
+    'data.R'
+    'create_board.R'
+    'get_points.R'
+    'solve.R'
