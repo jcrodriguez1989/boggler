@@ -91,6 +91,7 @@ solve <- function(boggle_board, dict = boggler::spark_intro_dict,
 
     if (!is.null(act_res)) {
       # print and add to final results
+      colnames(act_res) <- c("Word", "Path")
       print(act_res)
       res <- rbind(res, act_res)
     }
@@ -103,7 +104,6 @@ solve <- function(boggle_board, dict = boggler::spark_intro_dict,
       next_paths(act_path, boggle_board)
     }))
   }
-  colnames(res) <- c("Word", "Path")
 
   # return them alphabetically ordered
   if (!is.null(res)) {

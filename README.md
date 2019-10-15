@@ -56,7 +56,7 @@ solutions:
 boggle_sol <- solve(act_board, dict = spark_intro_dict, word_min_len = 2)
 ```
 
-    ##      [,1] [,2]              
+    ##      Word Path              
     ## [1,] "by" "(1, 3) ~> (1, 2)"
     ## [2,] "tb" "(2, 3) ~> (1, 3)"
     ## [3,] "in" "(3, 3) ~> (2, 2)"
