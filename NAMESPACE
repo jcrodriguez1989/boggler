@@ -2,3 +2,5 @@
 
 export(new_board)
 export(solve)
+importFrom(methods,is)
+importFrom(methods,new)

@@ -29,11 +29,25 @@ BogglePath <- setClass("BogglePath",
 #' @param word_min_len A numeric indicating the minimum length, in characters,
 #'          of a word to count as a valid word.
 #'
+#' @importFrom methods is new
+#'
 #' @export
 #'
 solve <- function(boggle_board, dict = spark_intro_dict, word_min_len = 3) {
   m <- nrow(boggle_board)
   n <- ncol(boggle_board)
+
+  if (m < 1 || n < 1 ||
+      !is(as.vector(boggle_board), "character") ||
+      !all(nchar(boggle_board) == 1)) {
+    stop("Boggle board must be a matrix of letters.")
+  }
+  boggle_board <- tolower(boggle_board)
+
+  if (length(dict) < 1) {
+    stop("The dictionary must have at least one valid word.")
+  }
+  dict <- tolower(dict)
 
   # each row is a valid board cell
   cells <- cbind(rep(seq_len(m), each = n), seq_len(n))
@@ -83,7 +97,9 @@ solve <- function(boggle_board, dict = spark_intro_dict, word_min_len = 3) {
   }))
 
   # return them alphabetically ordered
-  res[order(res[, 1]), ]
+  if (!is.null(res)) {
+    res[order(res[, 1]), ]
+  }
 }
 
 # Return longer words according to a path.
@@ -101,15 +117,19 @@ next_paths <- function(path, boggle_board) {
   curr_word <- path@current_word
   new_paths <- c()
 
-  new_poss <- act_pos + cbind(rep(-1:1, each = 3), -1:1)
-  new_poss <- new_poss[apply(new_poss > c(0, 0), 1, all), ]
-  unlist(apply(new_poss, 1, function(new_pos) {
+  # new positions will be the ones surrounding the actual position
+  new_poss <- act_pos + rbind(rep(-1:1, each = 3), -1:1)
+  unlist(apply(new_poss, 2, function(new_pos) {
+    # a new path will be possible if the new position falls into the board, and
+    # a previously used die is not used again
     if (
+      all(new_pos > c(0, 0)) &&
       new_pos[[1]] <= nrow(boggle_board) &&
       new_pos[[2]] <= ncol(boggle_board) &&
       !any(apply(vis_cells, 1, function(vis_cell) all(new_pos == vis_cell)))) {
       BogglePath(
         act_cell = new_pos,
+        # use the previous word, plus the new letter
         current_word = paste0(
           curr_word, boggle_board[new_pos[[1]], new_pos[[2]]]
         ),
