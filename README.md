@@ -53,14 +53,14 @@ And get all possible
 solutions:
 
 ``` r
-(boggle_sol <- solve(act_board, dict = spark_intro_dict, word_min_len = 2))
+boggle_sol <- solve(act_board, dict = spark_intro_dict, word_min_len = 2)
 ```
 
-    ##      Word Path              
+    ##      [,1] [,2]              
     ## [1,] "by" "(1, 3) ~> (1, 2)"
-    ## [2,] "in" "(3, 3) ~> (2, 2)"
-    ## [3,] "it" "(3, 3) ~> (2, 3)"
-    ## [4,] "tb" "(2, 3) ~> (1, 3)"
+    ## [2,] "tb" "(2, 3) ~> (1, 3)"
+    ## [3,] "in" "(3, 3) ~> (2, 2)"
+    ## [4,] "it" "(3, 3) ~> (2, 3)"
 
 And calculate obtained points:
 

@@ -36,7 +36,7 @@ set.seed(881918)
 And get all possible solutions:
 
 ```{r}
-(boggle_sol <- solve(act_board, dict = spark_intro_dict, word_min_len = 2))
+boggle_sol <- solve(act_board, dict = spark_intro_dict, word_min_len = 2)
 ```
 
 And calculate obtained points:
