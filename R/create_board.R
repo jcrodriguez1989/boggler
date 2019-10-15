@@ -17,6 +17,7 @@ dices <- c(
   "ENHRIS"
 )
 
+#' @export
 new_board <- function(m = 4, n = 4, alphabet = letters) {
   matrix(sample(letters, m * n, replace = TRUE), nrow = m)
 }
