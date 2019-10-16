@@ -64,10 +64,18 @@ solve <- function(boggle_board, dict = boggler::spark_intro_dict,
     )
   })
 
+  # save actual paths length
+  curr_len <- 1
+
   # res will contain final results
   res <- NULL
 
-  while (length(new_paths) > 0) {
+  # get word max length, to get paths up to that long
+  word_max_len <- max(sapply(dict, nchar))
+
+  while (length(new_paths) > 0 && curr_len <= word_max_len) {
+    curr_len <- curr_len + 1 # increase the path length in one
+
     # keep only those words that are larger than the minimum length, and that is
     # valid according to the dictionary.
     act_res <- new_paths[
