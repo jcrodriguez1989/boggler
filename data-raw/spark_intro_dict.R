@@ -12,4 +12,6 @@ spark_intro_dict <- readLines(
   unique() %>%
   sort()
 
+spark_intro_dict <- spark_intro_dict[!grepl("[^[:alpha:]]", spark_intro_dict)]
+
 use_data(spark_intro_dict)

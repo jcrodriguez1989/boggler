@@ -56,7 +56,7 @@ solve <- function(boggle_board, dict = boggler::spark_intro_dict,
 
   # we will start with one-character paths, and enlarging them one char at a
   # time according to its surrounding (not visited) cells.
-  all_paths <- new_paths <- apply(cells, 1, function(act_cell) {
+  new_paths <- apply(cells, 1, function(act_cell) {
     BogglePath(
       act_cell = act_cell,
       current_word = boggle_board[act_cell[[1]], act_cell[[2]]],
@@ -64,7 +64,42 @@ solve <- function(boggle_board, dict = boggler::spark_intro_dict,
     )
   })
 
+  # res will contain final results
+  res <- NULL
+
   while (length(new_paths) > 0) {
+    # keep those paths that are starting sub-words from dict
+    new_paths <- new_paths[unlist(lapply(new_paths, function(act_path)
+      any(startsWith(dict, act_path@current_word))))]
+
+    # keep only those words that are larger than the minimum length, and that is
+    # valid according to the dictionary
+    act_res <- new_paths[
+      unlist(lapply(new_paths, function(act_path) {
+        nchar(act_path@current_word) >= word_min_len &&
+          act_path@current_word %in% dict
+      }))
+    ]
+
+    # pretty-print the results
+    act_res <- do.call(rbind, lapply(act_res, function(act_path) {
+      c(
+        act_path@current_word,
+        paste(
+          apply(act_path@visited_cells, 1, function(act_cell)
+            paste0("(", act_cell[[1]], ", ", act_cell[[2]], ")")),
+          collapse = " ~> "
+        )
+      )
+    }))
+
+    if (!is.null(act_res)) {
+      # print and add to final results
+      colnames(act_res) <- c("Word", "Path")
+      print(act_res)
+      res <- rbind(res, act_res)
+    }
+
     act_paths <- new_paths # actual paths to enlarge
     new_paths <- c() # new generated paths
 
@@ -72,33 +107,7 @@ solve <- function(boggle_board, dict = boggler::spark_intro_dict,
     new_paths <- unlist(lapply(act_paths, function(act_path) {
       next_paths(act_path, boggle_board)
     }))
-
-    # add these new paths to all possible paths list
-    all_paths <- c(all_paths, new_paths)
   }
-
-  # keep only those words that are larger than the minimum length, and that is
-  # valid according to the dictionary.
-  all_paths <- all_paths[
-    sapply(all_paths, function(act_path) {
-      nchar(act_path@current_word) >= word_min_len &&
-        act_path@current_word %in% dict
-    })
-  ]
-
-  # pretty-print the results
-  res <- do.call(rbind, lapply(all_paths, function(act_path) {
-    c(
-      act_path@current_word,
-      paste(
-        apply(act_path@visited_cells, 1, function(act_cell)
-          paste0("(", act_cell[[1]], ", ", act_cell[[2]], ")")),
-        collapse = " ~> "
-      )
-    )
-  }))
-
-  colnames(res) <- c("Word", "Path")
 
   # return them alphabetically ordered
   if (!is.null(res)) {
