@@ -25,7 +25,7 @@ remotes::install_github("jcrodriguez1989/boggler", dependencies = TRUE)
 
 ## Usage
 
-Create a random `3 x 3` boggle board:
+Create a random `4 x 4` boggle board:
 
 ``` r
 library("boggler")
@@ -41,13 +41,14 @@ library("boggler")
 ``` r
 set.seed(881918)
 
-(act_board <- new_board(m = 3, n = 3, dices = en_boggle_dices))
+(act_board <- new_board(m = 4, n = 4, dices = en_boggle_dices))
 ```
 
-    ##      [,1] [,2] [,3]
-    ## [1,] "C"  "Y"  "B" 
-    ## [2,] "C"  "N"  "T" 
-    ## [3,] "Y"  "G"  "I"
+    ##      [,1] [,2] [,3] [,4]
+    ## [1,] "T"  "H"  "N"  "N" 
+    ## [2,] "O"  "E"  "T"  "E" 
+    ## [3,] "T"  "A"  "O"  "D" 
+    ## [4,] "V"  "V"  "S"  "O"
 
 And get all possible
 solutions:
@@ -56,11 +57,23 @@ solutions:
 boggle_sol <- solve(act_board, dict = spark_intro_dict, word_min_len = 2)
 ```
 
-    ##      Word Path              
-    ## [1,] "by" "(1, 3) ~> (1, 2)"
-    ## [2,] "tb" "(2, 3) ~> (1, 3)"
-    ## [3,] "in" "(3, 3) ~> (2, 2)"
-    ## [4,] "it" "(3, 3) ~> (2, 3)"
+    ##       Word Path              
+    ##  [1,] "to" "(1, 1) ~> (2, 1)"
+    ##  [2,] "to" "(2, 3) ~> (3, 3)"
+    ##  [3,] "to" "(3, 1) ~> (2, 1)"
+    ##  [4,] "at" "(3, 2) ~> (2, 3)"
+    ##  [5,] "at" "(3, 2) ~> (3, 1)"
+    ##  [6,] "as" "(3, 2) ~> (4, 3)"
+    ##  [7,] "vs" "(4, 2) ~> (4, 3)"
+    ##  [8,] "so" "(4, 3) ~> (3, 3)"
+    ##  [9,] "so" "(4, 3) ~> (4, 4)"
+    ##      Word  Path                        
+    ## [1,] "the" "(1, 1) ~> (1, 2) ~> (2, 2)"
+    ## [2,] "the" "(2, 3) ~> (1, 2) ~> (2, 2)"
+    ## [3,] "too" "(2, 3) ~> (3, 3) ~> (4, 4)"
+    ##      Word   Path                                  
+    ## [1,] "then" "(1, 1) ~> (1, 2) ~> (2, 2) ~> (1, 3)"
+    ## [2,] "then" "(2, 3) ~> (1, 2) ~> (2, 2) ~> (1, 3)"
 
 And calculate obtained points:
 
@@ -68,10 +81,14 @@ And calculate obtained points:
 get_points(boggle_sol[, 1])
 ```
 
-    ## [1] "You got a total score of 4"
+    ## [1] "You got a total score of 8"
 
     ##   Word Points
-    ## 1   by      1
-    ## 2   in      1
-    ## 3   it      1
-    ## 4   tb      1
+    ## 1   as      1
+    ## 2   at      1
+    ## 3   so      1
+    ## 4  the      1
+    ## 5 then      1
+    ## 6   to      1
+    ## 7  too      1
+    ## 8   vs      1

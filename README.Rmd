@@ -24,13 +24,13 @@ remotes::install_github("jcrodriguez1989/boggler", dependencies = TRUE)
 
 ## Usage
 
-Create a random `3 x 3` boggle board:
+Create a random `4 x 4` boggle board:
 
 ```{r}
 library("boggler")
 set.seed(881918)
 
-(act_board <- new_board(m = 3, n = 3, dices = en_boggle_dices))
+(act_board <- new_board(m = 4, n = 4, dices = en_boggle_dices))
 ```
 
 And get all possible solutions:
