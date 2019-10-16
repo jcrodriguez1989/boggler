@@ -143,6 +143,8 @@ shinyServer(function(input, output, session) {
       if (!is.null(new_word)) {
         words_found(c(words_found(), new_word[[1]]))
         showNotification(paste0("Correct word: ", new_word[[1]]))
+      } else {
+        showNotification("Incorrect word", type = "error")
       }
     }
     in_path(!in_path())
