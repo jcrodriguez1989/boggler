@@ -181,6 +181,14 @@ subdict_to_tree <- function(prev_word, dictionary) {
   res
 }
 
+# Convert a dictionary to its tree-structure.
+#
+# Given a dictionary of words, this function will return the same dictionary,
+# but in a tree structure.
+#
+# Params
+#   dictionary A character vector containing all the valid words.
+#
 dict_to_tree <- function(dictionary) {
   fst_chars <- unique(substr(dictionary, 1, 1))
   res <- lapply(fst_chars, function(fst_char) {
@@ -194,6 +202,14 @@ dict_to_tree <- function(dictionary) {
   res
 }
 
+# Checks if a path is valid, given a dictionary.
+#
+# Checks if a path could end into a valid word according to the dictionary.
+#
+# Params:
+#   boggle_path The current BogglePath to check.
+#   dictionary  A character vector containing all the valid words.
+#
 valid_path <- function(boggle_path, dictionary) {
   act_word <- boggle_path@current_word
 
@@ -209,6 +225,14 @@ valid_path <- function(boggle_path, dictionary) {
   res
 }
 
+# Checks if a path is a valid word, given a dictionary.
+#
+# Checks if a path is a valid word according to the dictionary.
+#
+# Params:
+#   boggle_path The current BogglePath to check.
+#   dictionary  A character vector containing all the valid words.
+#
 valid_word <- function(boggle_path, dictionary) {
   act_word <- boggle_path@current_word
 
