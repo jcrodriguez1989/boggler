@@ -50,6 +50,7 @@ solve <- function(boggle_board, dict = boggler::spark_intro_dict,
     stop("The dictionary must have at least one valid word.")
   }
   dict <- tolower(dict)
+  dict <- dict_to_tree(dict)
 
   # each row is a valid board cell
   cells <- cbind(rep(seq_len(m), each = n), seq_len(n))
@@ -70,14 +71,16 @@ solve <- function(boggle_board, dict = boggler::spark_intro_dict,
   while (length(new_paths) > 0) {
     # keep those paths that are starting sub-words from dict
     new_paths <- new_paths[unlist(lapply(new_paths, function(act_path)
-      any(startsWith(dict, act_path@current_word))))]
+      valid_path(act_path, dict)))]
+      # any(startsWith(dict, act_path@current_word))))]
 
     # keep only those words that are larger than the minimum length, and that is
     # valid according to the dictionary
     act_res <- new_paths[
       unlist(lapply(new_paths, function(act_path) {
         nchar(act_path@current_word) >= word_min_len &&
-          act_path@current_word %in% dict
+          valid_word(act_path, dict)
+          # act_path@current_word %in% dict
       }))
     ]
 
@@ -150,4 +153,73 @@ next_paths <- function(path, boggle_board) {
       )
     }
   }))
+}
+
+TreeCell <- setClass("TreeCell",
+                       slots = c(
+                         name = "character",
+                         is_word = "logical",
+                         child = "list"
+                       )
+)
+
+subdict_to_tree <- function(prev_word, dictionary) {
+  act_words <- dictionary[startsWith(dictionary, prev_word)]
+  prnt_len <- nchar(prev_word)
+  act_words <- act_words[nchar(act_words) > prnt_len]
+
+  new_chars <- unique(substr(act_words, prnt_len+1, prnt_len+1))
+  res <- lapply(new_chars, function(new_char) {
+    new_word <- paste0(prev_word, new_char)
+    TreeCell(
+      name = new_char,
+      is_word = new_word %in% dictionary,
+      child = subdict_to_tree(new_word, dictionary)
+    )
+  })
+  names(res) <- new_chars
+  res
+}
+
+dict_to_tree <- function(dictionary) {
+  fst_chars <- unique(substr(dictionary, 1, 1))
+  res <- lapply(fst_chars, function(fst_char) {
+    TreeCell(
+      name = fst_char,
+      is_word = fst_char %in% dictionary,
+      child = subdict_to_tree(fst_char, dictionary)
+    )
+  })
+  names(res) <- fst_chars
+  res
+}
+
+valid_path <- function(boggle_path, dictionary) {
+  act_word <- boggle_path@current_word
+
+  res <- TRUE
+  for (i in seq_len(nchar(act_word))) {
+    act_char <- substr(act_word, i, i)
+    res <- res && act_char %in% names(dictionary)
+    dictionary <- dictionary[[act_char]]
+    if (!is.null(dictionary)) {
+      dictionary <- dictionary@child
+    }
+  }
+  res
+}
+
+valid_word <- function(boggle_path, dictionary) {
+  act_word <- boggle_path@current_word
+
+  res <- FALSE
+  for (i in seq_len(nchar(act_word))) {
+    act_char <- substr(act_word, i, i)
+    dictionary <- dictionary[[act_char]]
+    if (!is.null(dictionary)) {
+      res <- dictionary@is_word
+      dictionary <- dictionary@child
+    }
+  }
+  res
 }
